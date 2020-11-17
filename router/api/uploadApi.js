@@ -4,6 +4,7 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 const { updateUser } = require('../../services/UserServices')
+const asyncHandler = require('../sendResult')
 
 // 保存key值
 let fieldname;
@@ -28,7 +29,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 // 处理上传文件
-uploadRouter.post('/transfer', upload.fields([{ name: 'upload' }, { name: 'portrait' }]), async (req, res) => {
+uploadRouter.post('/transfer', asyncHandler(upload.fields([{ name: 'upload' }, { name: 'portrait' }]), async (req, res) => {
   const files = req.files[fieldname][0]
   const target = path.join('upload')
 
@@ -55,16 +56,16 @@ uploadRouter.post('/transfer', upload.fields([{ name: 'upload' }, { name: 'portr
     }
   }
   res.send(responseObj)
-})
+}))
 
 // 删除本地文件
-uploadRouter.post('/delete', (req) => {
+uploadRouter.post('/delete', asyncHandler((req) => {
   const body = req.body
   deleteFile(body.urlname)
-})
+}))
 
 // 获取图片
-uploadRouter.get('/:url', (req, res, next) => {
+uploadRouter.get('/:url', asyncHandler((req, res, next) => {
   var options = {
     root: path.join(__dirname, '../../upload'),
     dotfiles: 'deny',
@@ -82,7 +83,7 @@ uploadRouter.get('/:url', (req, res, next) => {
       console.log('Sent:', fileName)
     }
   })
-})
+}))
 
 /* 删除指定路径文件 */
 function deleteFile(fileName) {

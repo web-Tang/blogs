@@ -2,40 +2,26 @@ const express = require('express')
 const { userVerify, updateUser, userObj } = require('../../services/UserServices')
 const userRouter = express.Router()
 const { publish } = require('../../util/jwt')
+const asyncHandler = require('../sendResult')
 
-userRouter.post('/', async (req, res) => {
+userRouter.post('/', asyncHandler(async (req, res) => {
   const options = req.body
   const { id, state } = await userVerify(options.loginId, options.loginPwd)
   if (state) {
     // 设置cookie
     publish(res, { UserId: id })
   }
-  
-  res.send({
-    code: 200,
-    msg: '',
-    data: state
-  })
-})
+  return state
+}))
 
-userRouter.put('/update', async (req, res) => {
+userRouter.put('/update', asyncHandler(async (req, res) => {
   const options = req.body
-  const result = await updateUser(options.id, options.obj)
-  res.send({
-    code: 200,
-    msg: '',
-    data: result
-  })
-})
+  return await updateUser(options.id, options.obj)
+}))
 
-userRouter.get('/', async (req, res) => {
-  const UserId = req.tokenObj.UserId
-  const result = await userObj(UserId)
-  res.send({
-    code: 200,
-    msg: '',
-    data: result
-  })
-})
+userRouter.get('/', asyncHandler(async (req) => {
+  const UserId = req.tokenObj.UserId;
+  return await userObj(UserId)
+}))
 
 module.exports = userRouter

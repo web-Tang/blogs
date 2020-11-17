@@ -2,14 +2,12 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
-const staticPath = path.resolve(__dirname, "../dist");
 const verifyToken = require("./verifyToken");
 const cors = require("cors");
 
 app.use(
   cors({
     origin(origin, callback) {
-      console.log(origin);
       if (!origin) {
         callback(null, "*");
         return;
@@ -21,7 +19,7 @@ app.use(
   })
 );
 
-app.use("/", express.static(staticPath));
+app.use("/", express.static(path.resolve(__dirname, "../dist")));
 
 app.use(express.json());
 
@@ -34,6 +32,8 @@ app.use("/user", require("./api/userApi"));
 app.use("/type", require("./api/typeApi"));
 app.use("/articles", require("./api/articlesApi"));
 app.use("/witticism", require("./api/witticismApi"));
+
+app.use(require('./error'))
 
 const prot = 5008;
 app.listen(prot, () => {
