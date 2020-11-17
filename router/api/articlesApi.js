@@ -4,82 +4,50 @@ const { addComment } = require('../../services/RevertsServices')
 const articlesRouter = express.Router()
 const asyncHandler = require('../sendResult')
 
-articlesRouter.post('/all',asyncHandler( async (req, res) => {
+articlesRouter.post('/all', asyncHandler(async (req) => {
   const json = req.body
-  const result = await artAll(json)
-  return res.send({
-    code: 200,
-    data: result
-  })
+  return await artAll(json)
 }))
 
-articlesRouter.post('/create',asyncHandler( async (req, res) => {
+articlesRouter.post('/create', asyncHandler(async (req) => {
   const json = req.body;
-  const result = await artAdd(json)
-  return res.send({
-    code: 200,
-    data: result
-  })
+  return await artAdd(json)
 }))
 
-articlesRouter.get('/delete',asyncHandler( async (req, res) => {
+articlesRouter.get('/delete', asyncHandler(async (req) => {
   const query = req.query
-  const result = await artDelete(query)
-  return res.send({
-    code: 200,
-    data: result
-  })
+  return await artDelete(query)
 }))
 
-articlesRouter.put('/update',asyncHandler( async (req, res) => {
+articlesRouter.put('/update', asyncHandler(async (req) => {
   const json = req.body
-  const result = await artUpdate(json)
-  return res.send({
-    code: 200,
-    data: result
-  })
+  return await artUpdate(json)
 }))
 
 /* 以下为前台文章处理接口 */
 
 // 获取文章列表
-articlesRouter.get('/list',asyncHandler( async (req, res) => {
+articlesRouter.get('/list', asyncHandler(async (req) => {
   const page = req.query.page;
-  const result = await artList(page)
-  return res.send({
-    code: 200,
-    data: result
-  })
+  return await artList(page)
 }))
 
 // 获取指定文章信息
-articlesRouter.get('/content',asyncHandler( async (req, res) => {
+articlesRouter.get('/content', asyncHandler(async (req) => {
   const query = req.query;
-  const result = await showArt(query)
-  return res.send({
-    code: 200,
-    data: result
-  })
+  return await showArt(query)
 }))
 
 // 获得文章评论
-articlesRouter.post('/comment',asyncHandler( async (req, res) => {
+articlesRouter.post('/comment', asyncHandler(async (req) => {
   const query = req.body;
-  const result = await getArtComment(query)
-  return res.send({
-    code: 200,
-    data: result
-  })
+  return await getArtComment(query)
 }))
 
 // 添加评论
-articlesRouter.post('/addcomment',asyncHandler( async (req, res) => {
+articlesRouter.post('/addcomment', asyncHandler(async (req) => {
   const json = req.body;
-  const result = await addComment(json)
-  return res.send({
-    code: 200,
-    data: result
-  })
+  return await addComment(json)
 }))
 
 module.exports = articlesRouter

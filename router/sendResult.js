@@ -1,5 +1,5 @@
 // 防止异常
-module.exports = (handler) => {
+module.exports = handler => {
   return async (req, res, next) => {
     try {
       const result = await handler(req, res, next);

@@ -6,6 +6,7 @@ const asyncHandler = require('../sendResult')
 
 userRouter.post('/', asyncHandler(async (req, res) => {
   const options = req.body
+  console.log(options)
   const { id, state } = await userVerify(options.loginId, options.loginPwd)
   if (state) {
     // 设置cookie
